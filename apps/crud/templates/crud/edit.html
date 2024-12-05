@@ -1,0 +1,43 @@
+{% extends "crud/base.html" %}
+{% block title %}회원정보 수정{% endblock %}
+
+{% block content %}
+<h1>정보 수정 페이지</h1>
+<form action="{{ url_for('crud.user_edit', user_id=user.id) }}" , method="POST" novalidate>
+  {{ form.csrf_token }}
+
+  <div>
+    {{ form.username.label }}
+    {{ form.username(placeholder="사용자명을 입력하세요", value=user.username) }}
+  </div>
+  {% for error in form.username.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+
+  <div>
+    {{ form.email.label }}
+    {{ form.email(placeholder="메일주소를 입력하세요", value=user.email) }}
+  </div>
+  {% for error in form.email.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+
+  <div>
+    {{ form.password.label }}
+    {{ form.password(placeholder="비밀번호를 입력하세요") }}
+  </div>
+  {% for error in form.password.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+
+  <div>
+    <input type="submit" value="정보수정">
+  </div>
+</form>
+
+<form action="{{url_for('crud.delete_user', user_id=user.id)}}", method="post">
+  <!-- user 안에 id를 user_id라는 변수에 담아서 views.py에 user_id로 보냄 -->
+  {{form.csrf_token}}
+    <input type="submit" value="탈퇴">
+</form>
+{% endblock %}

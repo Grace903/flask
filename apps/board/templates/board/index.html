@@ -1,0 +1,36 @@
+{% extends "detector/base.html" %}
+
+{% block content %}
+<h3>게시판</h3>
+
+<div class="container my-3">
+  <a class="btn btn-primary mb-3" href="{{url_for('board.new_board')}}">글 작성</a>
+</div>
+
+<table class="table">
+  <thead>
+  <tbody>
+    {% for board in boards %}
+    <tr>
+      <td>{{ board.id }}</td>
+      <td>
+        <a href="{{ url_for('board.detail_board', board_id = board.id) }}">{{ board.subject }}</a>
+      </td>
+      <td>{{ board.user.username }}</td>
+      <td>{{ board.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% for page in range(1, boards.pages + 1) %}
+    {% if page == boards.page %}
+      <span class="active">{{ page }}</span>
+    {% else %}
+      <a href="{{ url_for('board.index', page=page) }}">{{ page }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% endblock %}

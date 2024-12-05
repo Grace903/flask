@@ -1,0 +1,37 @@
+{% extends "detector/base.html" %}
+
+{% block content %}
+
+<div>
+  <form action="{{ url_for ('board.new_board') }}" method="post" enctype="multipart/form-data" novalidate>
+    {{form.csrf_token}}
+
+    {% for field in form %}
+      {% for error in field.errors %}
+         <p class="alert alert-danger">{{error}}</p>
+      {% endfor %}
+    {% endfor %}
+
+    <div>
+      {{form.subject.label}}
+      {{form.subject(class='form-control')}}
+    </div>
+
+    <div>
+      {{form.content.label}}
+      {{form.content(class='form-control')}}
+    </div>
+
+    {{ form.submit(class="btn btn-primary mt-3")}}
+  </form>
+</div>
+
+{% endblock %}
+
+<!-- <div>
+  <h3>제목 : </h3>{{ boards.subject }}<br>
+  <p>작성자: </p>{{ boards.user.id }}<br>
+  <p>내용 : </p>{{ boards.content }}<br>
+
+  <a href="{{ url_for('board.detail', board_id=board.id) }}">자세히 보기</a>
+</div> -->

@@ -1,0 +1,15 @@
+{% extends "crud/base.html" %}
+{% block title %}index페이지{% endblock %}
+
+{% block content %}
+  <h1>CRUD Index Page</h1>
+  <a href="{{ url_for('crud.create_user') }}">신규 회원 등록</a>
+
+  {% for user in users %}
+    <p>
+      id:{{ user.id }} / 
+      username : <a href="{{ url_for('crud.user_edit', user_id = user.id)}}"> {{ user.username }} / </a>
+      email : {{ user.email }}
+    </p>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "detector/base.html" %}
+
+{% block content %}
+
+<div class="mb-3">
+  <label class="form-label">제목</label>
+  <input class="form-control" type="text" value="{{ board.subject }}" readonly>
+</div>
+<!-- input 태그는 원래 입력받는 창인데 내용을 보여주기만 하려면 readonly 추가 -->
+
+<p>작성자 : {{ board.user.username }}</p>
+<p>작성일 : {{ board.created_at }}</p>
+
+<div class="mb-3">
+  <label class="form-label">내용</label>
+  <textarea class="form-control" rows="10" readonly>{{ board.content }}</textarea>
+</div>
+
+<div>
+  <a href="{{ url_for('board.board_edit', board_id=board.id) }}" class="btn btn-primary"
+    style="background-color: rgb(45, 111, 47); border-color: antiquewhite;">내용 수정</a>
+  <a href="{{ url_for('board.delete_board', board_id=board.id) }}" class="btn btn-danger delete-board"
+    style="background-color: rgb(148, 64, 78); border-color: antiquewhite;">삭제</a>
+</div>
+
+<hr>
+
+<div>
+  <h5>댓글 [{{ board.comment_list|length }}]</h5>
+  <div class="comment-list">
+    {% for comment in board.comment_list %}
+    <li class="list-group-item d-flex justify-content-between align-items-center" id="comment-{{ comment.id }}">
+      <div>
+        <p class="mb-1">작성자 : {{ comment.user.username }}</p>
+        <p class="mb-1" id="content-text-{{ comment.id }}">{{ comment.content }}</p>
+        <textarea class="form-control d-none" id="content-edit-{{ comment.id }}">{{ comment.content }}</textarea>
+        <p>작성일 : {{ comment.created_at }}</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-primary edit-comment-btn" data-comment-id="{{comment.id}}">수정</button>
+        <button class="btn btn-sm btn-success save-comment-btn d-none" data-comment-id="{{comment.id}}">저장</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteComment('{{comment.id}}')">삭제</button>
+      </div>
+    </li>
+    <hr>
+    {% endfor %}
+    <form action="{{ url_for('comment.new_comment', board_id=board.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <textarea class="form-control" name="content" rows="3"></textarea>
+      <input class="btn btn-primary mt-3" type="submit" value="등록">
+    </form>
+  </div>
+</div>
+<!-- detail.html에서 jinja로 comment_id 보내면 views.py의 route도 comment_id로 받아야 함 -->
+
+{% endblock %}
+
+{% block script %}
+<script src="{{url_for('board.static', filename='js/comment.js')}}"></script>
+{% endblock %}
